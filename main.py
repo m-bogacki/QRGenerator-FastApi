@@ -5,8 +5,14 @@ from base64 import b64encode
 from io import BytesIO
 import barcode
 from barcode.writer import ImageWriter
+from enum import Enum
 
 app = FastAPI()
+
+
+class CodeFormat(Enum):
+    QR = "qr"
+    BARCODE = "barcode"
 
 
 def buffer_to_base64(img):
@@ -34,7 +40,7 @@ def generate_barcode(input_text):
 
 
 @app.post("/qr/generate/{format}")
-async def generate_qr(input_text: str, format: str):
+async def generate_qr(input_text: str, format: CodeFormat):
     if format == "qr":
         return generate_qr_code(input_text)
     elif format == "barcode":
